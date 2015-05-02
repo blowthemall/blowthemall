@@ -2,6 +2,7 @@
 set(blowthemall_SRC
     main.cpp
     blowthemallcontroller.cpp
+    rpcnode.cpp
     "${PROJECT_SOURCE_DIR}/data/resources.qrc"
     # Trigger recompilation of Qt resources if modified
     # And also serves as hints to IDEs
