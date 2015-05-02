@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>gfx/logo.png</file>
+        <file>ui/main.qml</file>
+        <file>gfx/loadscreen-final.png</file>
+    </qresource>
+</RCC>
