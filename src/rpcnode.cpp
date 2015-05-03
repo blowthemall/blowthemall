@@ -294,6 +294,6 @@ inline QPair<QJsonValue, QJsonObject> RpcNode::processReply(const QString &metho
                           (8 < size) ? args[8] : QGenericArgument(),
                           (9 < size) ? args[9] : QGenericArgument());
 
-        return qMakePair(QJsonValue{retHandler}, QJsonObject{});
+        return qMakePair(static_cast<QJsonValue>(retHandler), QJsonObject{});
     }
 }
