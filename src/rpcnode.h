@@ -27,13 +27,13 @@
 
 #include <functional>
 
-class Node : public QObject
+class RpcNode : public QObject
 {
     Q_OBJECT
 public:
-    explicit Node(QObject *parent = 0);
-    explicit Node(Tufao::AbstractMessageSocket *socket, QObject *parent = 0);
-    ~Node();
+    explicit RpcNode(QObject *parent = 0);
+    explicit RpcNode(Tufao::AbstractMessageSocket *socket, QObject *parent = 0);
+    ~RpcNode();
 
     QObject *methods();
     void setMethods(QObject *object);

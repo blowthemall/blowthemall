@@ -80,7 +80,7 @@ QJsonObject jsonRpcObject(const QString &remoteMethod, const T &args)
     return object;
 }
 
-struct Node::Priv
+struct RpcNode::Priv
 {
     Priv(Tufao::AbstractMessageSocket *socket = NULL) :
         socket(socket)

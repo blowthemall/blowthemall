@@ -24,79 +24,79 @@
 
 using namespace Tufao;
 
-Node::Node(QObject *parent) :
+RpcNode::RpcNode(QObject *parent) :
     QObject(parent),
     priv(new Priv)
 {}
 
-Node::Node(AbstractMessageSocket *socket, QObject *parent) :
+RpcNode::RpcNode(AbstractMessageSocket *socket, QObject *parent) :
     QObject(parent),
     priv(new Priv(socket))
 {
     if (priv->socket) {
         connect(priv->socket, &AbstractMessageSocket::newMessage,
-                this, &Node::handleMessage);
+                this, &RpcNode::handleMessage);
     }
 }
 
-Node::~Node()
+RpcNode::~RpcNode()
 {
     delete priv;
 }
 
-QObject *Node::methods()
+QObject *RpcNode::methods()
 {
     return priv->methods;
 }
 
-void Node::setMethods(QObject *object)
+void RpcNode::setMethods(QObject *object)
 {
     priv->methods = object;
 }
 
-AbstractMessageSocket *Node::messageSocket()
+AbstractMessageSocket *RpcNode::messageSocket()
 {
     return priv->socket;
 }
 
-void Node::setMessageSocket(AbstractMessageSocket *socket)
+void RpcNode::setMessageSocket(AbstractMessageSocket *socket)
 {
     if (priv->socket) {
         disconnect(priv->socket, &AbstractMessageSocket::newMessage,
-                   this, &Node::handleMessage);
+                   this, &RpcNode::handleMessage);
     }
 
     priv->socket = socket;
 
     if (priv->socket) {
         connect(priv->socket, &AbstractMessageSocket::newMessage,
-                this, &Node::handleMessage);
+                this, &RpcNode::handleMessage);
     }
 }
 
-QJsonValue Node::callWith(const QString &remoteMethod, const QJsonArray &args,
+QJsonValue RpcNode::callWith(const QString &remoteMethod, const QJsonArray &args,
                           std::function<void(QJsonValue)> handler)
 {
     return priv->callWith(remoteMethod, args, handler);
 }
 
-QJsonValue Node::callWith(const QString &remoteMethod, const QJsonObject &args,
+QJsonValue RpcNode::callWith(const QString &remoteMethod, const QJsonObject &args,
                           std::function<void(QJsonValue)> handler)
 {
     return priv->callWith(remoteMethod, args, handler);
 }
 
-void Node::call(const QString &remoteMethod, const QJsonArray &args)
+void RpcNode::call(const QString &remoteMethod, const QJsonArray &args)
 {
     priv->call(remoteMethod, args);
 }
 
-void Node::call(const QString &remoteMethod, const QJsonObject &args)
+void RpcNode::call(const QString &remoteMethod, const QJsonObject &args)
 {
     priv->call(remoteMethod, args);
 }
 
-void Node::handleMessage(const QByteArray &msg)
+void RpcNode::handleMessage(const QByteArray &msg)
 {
     QJsonParseError err;
     auto object = QJsonDocument::fromJson(msg, &err);
@@ -123,7 +123,7 @@ void Node::handleMessage(const QByteArray &msg)
     }
 }
 
-inline void Node::handleRequest(const QJsonDocument &object)
+inline void RpcNode::handleRequest(const QJsonDocument &object)
 {
     if (object.isObject()) {
         QJsonObject response = processRequest(object.object());
@@ -157,7 +157,7 @@ inline void Node::handleRequest(const QJsonDocument &object)
     }
 }
 
-inline void Node::handleResponse(const QJsonObject &object)
+inline void RpcNode::handleResponse(const QJsonObject &object)
 {
     if (!object.contains("id"))
         return;
@@ -181,7 +181,7 @@ inline void Node::handleResponse(const QJsonObject &object)
     priv->calls.remove(key);
 }
 
-QJsonObject Node::processRequest(const QJsonObject &request)
+QJsonObject RpcNode::processRequest(const QJsonObject &request)
 {
     QJsonObject reply({{QString("jsonrpc"), QJsonValue("2.0")}});
 
@@ -238,7 +238,7 @@ QJsonObject Node::processRequest(const QJsonObject &request)
     return reply;
 }
 
-inline QPair<QJsonValue, QJsonObject> Node::processReply(const QString &method,
+inline QPair<QJsonValue, QJsonObject> RpcNode::processReply(const QString &method,
                                                          const QJsonValue &args)
 {
     if (!priv->methods
