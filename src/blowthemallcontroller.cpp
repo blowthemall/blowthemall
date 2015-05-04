@@ -17,13 +17,23 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   */
 
+#include "global.h"
 #include "blowthemallcontroller.h"
+#include "matchserver.h"
+#include "matchclient.h"
+#include "gamescene.h"
+
 #include <QtCore/QVariant>
 #include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QLabel>
 
 BlowThemAllController::BlowThemAllController(QObject *parent)
     : QObject(parent)
-    , gameView(new QGraphicsView)
+    , gameScene(new GameScene{this})
+    , gameView(new QGraphicsView{gameScene})
+    , matchServer(new MatchServer{this})
+    , matchClient(new MatchClient{gameScene, this})
 {}
 
 BlowThemAllController::~BlowThemAllController()
@@ -36,15 +46,39 @@ void BlowThemAllController::setComponentObject(QObject *component)
     component_ = component;
 }
 
-void BlowThemAllController::serveGame(quint16 /*port*/)
+void BlowThemAllController::serveGame(quint16 port)
 {
     emit matchStarted();
-    gameView->show();
+    auto l = new QLabel{"Starting..."};
+    l->show();
+    matchServer->listen(port);
+    matchClient->connectToHost("127.0.0.1", port);
+    connect(matchClient, &MatchClient::connected, [this,l]() {
+        l->deleteLater();
+        auto d = new QMessageBox;
+        d->setText("Ready to play?");
+        d->setButtonText(0, "Yes");
+        d->setModal(false);
+        d->show();
+        connect(d, &QMessageBox::finished, [this,d]() {
+            d->deleteLater();
+            matchClient->notifyReadyToPlay();
+            gameView->show();
+        });
+    });
 }
 
-void BlowThemAllController::joinGame(const QString &/*host*/, quint16 /*port*/)
+void BlowThemAllController::joinGame(const QString &host, quint16 port)
 {
     emit matchStarted();
-    gameView->show();
+    auto l = new QLabel{"Connecting..."};
+    l->show();
+    matchClient->connectToHost(host, port);
+    connect(matchClient, &MatchClient::connected, [this,l]() {
+        l->deleteLater();
+        QMessageBox::information(l, "Ready?", "Ready to play?", "Yes");
+        matchClient->notifyReadyToPlay();
+        gameView->show();
+    });
 }
 

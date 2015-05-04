@@ -22,7 +22,10 @@
 
 #include <QtCore/QObject>
 
+class GameScene;
 class QGraphicsView;
+class MatchServer;
+class MatchClient;
 
 class BlowThemAllController : public QObject
 {
@@ -43,7 +46,10 @@ public slots:
 
 private:
     QObject *component_ = NULL;
+    GameScene *gameScene;
     QGraphicsView *gameView;
+    MatchServer *matchServer;
+    MatchClient *matchClient;
 };
 
 #endif // BLOWTHEMALLCONTROLLER_H

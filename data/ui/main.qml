@@ -101,7 +101,7 @@ Window {
                 id: servingPortInput
                 minimumValue: 1
                 maximumValue: 65535
-                value: 1
+                value: 8799
                 prefix: "Port: "
             }
 
@@ -136,7 +136,7 @@ Window {
                 id: portInput
                 minimumValue: 1
                 maximumValue: 65535
-                value: 1
+                value: 8799
                 prefix: "Port: "
             }
 
