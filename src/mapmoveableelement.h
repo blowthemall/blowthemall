@@ -3,8 +3,6 @@
 
 #include <QtCore/QString>
 
-class MapTile;
-
 struct MapMoveableElement
 {
     enum class ElementKind
