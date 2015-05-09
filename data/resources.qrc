@@ -15,5 +15,6 @@
         <file>gfx/simplechar/E2.svg</file>
         <file>gfx/simplechar/b3.svg</file>
         <file>gfx/simplechar/w2.svg</file>
+        <file>gfx/eternal/b0.svg</file>
     </qresource>
 </RCC>

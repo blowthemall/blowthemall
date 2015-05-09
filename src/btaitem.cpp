@@ -70,6 +70,16 @@ void BtaItem::paint(QPainter *painter,
             painter->setBrush(Qt::Dense3Pattern);
             painter->drawRect(0, 0, TILE_SIZE, TILE_SIZE);
         }
+    } else if (animationSet == "eternal") {
+        if (animationState == "first") {
+            painter->drawImage(QRectF{0, 0, TILE_SIZE, TILE_SIZE},
+                               QImage{":/gfx/eternal/b0.svg"});
+        } else {
+            qDebug("Unrecognized animation state");
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(Qt::Dense3Pattern);
+            painter->drawRect(0, 0, TILE_SIZE, TILE_SIZE);
+        }
     } else {
         qDebug("Unrecognized animation set");
         painter->setPen(Qt::NoPen);

@@ -130,8 +130,10 @@ void MatchServer::startMatchImpl()
             auto id = "b" + QString::number(i) + "," + QString::number(j);
             switch (map.element(i, j).level) {
             case MapTile::Level::BREAKABLE:
-            case MapTile::Level::UNBREAKABLE:
                 broadcast->addItem(id, i, j, 1, "basic", "first");
+                break;
+            case MapTile::Level::UNBREAKABLE:
+                broadcast->addItem(id, i, j, 1, "eternal", "first");
             case MapTile::Level::NON_BLOCKING_GROUND:
                 ;
             }
