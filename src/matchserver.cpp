@@ -154,7 +154,7 @@ void MatchServer::startMatchImpl()
         e.x_filled = 7;
         e.y_filled = 7;
         e.id = players[1];
-        map.element(0, 0).items.push_back(e);
+        map.element(map.width() - 1, 0).items.push_back(e);
         broadcast->addItem(e.id, map.width() - 1, 0, 0, "simplechar",
                            "standing-down");
     }
@@ -164,7 +164,7 @@ void MatchServer::startMatchImpl()
         e.x_filled = 7;
         e.y_filled = 7;
         e.id = players[2];
-        map.element(0, 0).items.push_back(e);
+        map.element(0, map.height() - 1).items.push_back(e);
         broadcast->addItem(e.id, 0, map.height() - 1, 0, "simplechar",
                            "standing-down");
     }
@@ -174,7 +174,7 @@ void MatchServer::startMatchImpl()
         e.x_filled = 7;
         e.y_filled = 7;
         e.id = players[3];
-        map.element(0, 0).items.push_back(e);
+        map.element(map.width() - 1, map.height() - 1).items.push_back(e);
         broadcast->addItem(e.id, map.width() - 1, map.height() - 1, 0,
                            "simplechar", "standing-down");
     }
