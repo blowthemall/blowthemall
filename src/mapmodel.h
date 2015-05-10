@@ -1,9 +1,6 @@
 #ifndef MAPMODEL_H
 #define MAPMODEL_H
 
-#include <QtCore/QHash>
-#include <QtCore/QMap>
-#include <QtCore/QJsonValue>
 #include "maptile.h"
 
 class MapModel
