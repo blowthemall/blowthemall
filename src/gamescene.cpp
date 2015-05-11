@@ -39,16 +39,16 @@ void GameScene::keyReleaseEvent(QKeyEvent *keyEvent)
     keys[idx] = -1;
     switch (idx) {
     case Keys::UP:
-        emit moveUp(value);
+        emit moveUp(double{value} / 1000.);
         break;
     case Keys::RIGHT:
-        emit moveRight(value);
+        emit moveRight(double{value} / 1000.);
         break;
     case Keys::DOWN:
-        emit moveDown(value);
+        emit moveDown(double{value} / 1000.);
         break;
     case Keys::LEFT:
-        emit moveLeft(value);
+        emit moveLeft(double{value} / 1000.);
         break;
     case Keys::DROP_BOMB:
         emit dropBomb();
@@ -58,13 +58,13 @@ void GameScene::keyReleaseEvent(QKeyEvent *keyEvent)
 void GameScene::onTimer()
 {
     if (keys[Keys::UP] > 0)
-        emit moveUp(KEY_EVENT_MAX_LATENCY);
+        emit moveUp(double{KEY_EVENT_MAX_LATENCY} / 1000.);
     if (keys[Keys::RIGHT] > 0)
-        emit moveRight(KEY_EVENT_MAX_LATENCY);
+        emit moveRight(double{KEY_EVENT_MAX_LATENCY} / 1000.);
     if (keys[Keys::DOWN] > 0)
-        emit moveDown(KEY_EVENT_MAX_LATENCY);
+        emit moveDown(double{KEY_EVENT_MAX_LATENCY} / 1000.);
     if (keys[Keys::LEFT] > 0)
-        emit moveLeft(KEY_EVENT_MAX_LATENCY);
+        emit moveLeft(double{KEY_EVENT_MAX_LATENCY} / 1000.);
 }
 
 int GameScene::keyIndex(QKeyEvent *keyEvent)
