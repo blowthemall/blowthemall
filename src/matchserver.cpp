@@ -18,6 +18,7 @@
   */
 
 #include "matchserver.h"
+#include <algorithm>
 #include <QtCore/QJsonArray>
 #include <Tufao/HttpServer>
 #include <Tufao/HttpServerResponse>
@@ -99,22 +100,124 @@ void MatchServer::stopMatch()
 
 void MatchServer::onMoveUp(const QString &id, double secs)
 {
+    auto &idx = map.index()[id];
+    auto &cur_tile = map.element(idx.first, idx.second);
+    auto avatar_it = find_if(cur_tile.items.begin(), cur_tile.items.end(),
+                             [&id](const MapMoveableElement &v) {
+        return v.id == id;
+    });
 
+    unsigned displacement = avatar_it->moveUp(secs);
+    if (displacement && idx.second != 0) {
+        if (displacement > idx.second) {
+            idx.second = 0;
+            avatar_it->y_filled = MapMoveableElement::filled_max();
+        } else {
+            idx.second -= displacement;
+        }
+
+        map.element(idx.first, idx.second).items.push_back(*avatar_it);
+        cur_tile.items.erase(avatar_it);
+        avatar_it = map.element(idx.first, idx.second).items.end() - 1;
+    }
+
+    if (idx.second == 0 && (displacement || avatar_it->is_up == true))
+        avatar_it->y_filled = MapMoveableElement::filled_max();
+
+    broadcast->moveItem(id, idx.first + avatar_it->xWithinTile(),
+                        idx.second + avatar_it->yWithinTile(), 0, secs / 2.);
 }
 
 void MatchServer::onMoveRight(const QString &id, double secs)
 {
+    auto &idx = map.index()[id];
+    auto &cur_tile = map.element(idx.first, idx.second);
+    auto avatar_it = find_if(cur_tile.items.begin(), cur_tile.items.end(),
+                             [&id](const MapMoveableElement &v) {
+        return v.id == id;
+    });
 
+    unsigned displacement = avatar_it->moveRight(secs);
+    if (displacement && idx.first != map.width() - 1) {
+        idx.first += displacement;
+        if (idx.first >= map.width()) {
+            idx.first = map.width() - 1;
+            avatar_it->x_filled = MapMoveableElement::filled_max();
+        }
+
+        map.element(idx.first, idx.second).items.push_back(*avatar_it);
+        cur_tile.items.erase(avatar_it);
+        avatar_it = map.element(idx.first, idx.second).items.end() - 1;
+    }
+
+    if (idx.first == map.width() - 1
+        && (displacement || avatar_it->is_left == false)) {
+        avatar_it->x_filled = MapMoveableElement::filled_max();
+    }
+
+    broadcast->moveItem(id, idx.first + avatar_it->xWithinTile(),
+                        idx.second + avatar_it->yWithinTile(), 0, secs / 2.);
 }
 
 void MatchServer::onMoveDown(const QString &id, double secs)
 {
+    auto &idx = map.index()[id];
+    auto &cur_tile = map.element(idx.first, idx.second);
+    auto avatar_it = find_if(cur_tile.items.begin(), cur_tile.items.end(),
+                             [&id](const MapMoveableElement &v) {
+        return v.id == id;
+    });
 
+    unsigned displacement = avatar_it->moveDown(secs);
+    if (displacement && idx.second != map.height() - 1) {
+        idx.second += displacement;
+        if (idx.second >= map.height()) {
+            idx.second = map.height() - 1;
+            avatar_it->y_filled = MapMoveableElement::filled_max();
+        }
+
+        map.element(idx.first, idx.second).items.push_back(*avatar_it);
+        cur_tile.items.erase(avatar_it);
+        avatar_it = map.element(idx.first, idx.second).items.end() - 1;
+    }
+
+    if (idx.second == map.height() - 1
+        && (displacement || avatar_it->is_up == false)) {
+        avatar_it->y_filled = MapMoveableElement::filled_max();
+    }
+
+    broadcast->moveItem(id, idx.first + avatar_it->xWithinTile(),
+                        idx.second + avatar_it->yWithinTile(), 0, secs / 2.);
 }
 
 void MatchServer::onMoveLeft(const QString &id, double secs)
 {
+    auto &idx = map.index()[id];
+    auto &cur_tile = map.element(idx.first, idx.second);
+    auto avatar_it = find_if(cur_tile.items.begin(), cur_tile.items.end(),
+                             [&id](const MapMoveableElement &v) {
+        return v.id == id;
+    });
 
+    unsigned displacement = avatar_it->moveLeft(secs);
+    if (displacement && idx.first != 0) {
+        if (displacement > idx.first) {
+            idx.first = 0;
+            avatar_it->x_filled = MapMoveableElement::filled_max();
+        } else {
+            idx.first -= displacement;
+        }
+
+        map.element(idx.first, idx.second).items.push_back(*avatar_it);
+        cur_tile.items.erase(avatar_it);
+        avatar_it = map.element(idx.first, idx.second).items.end() - 1;
+    }
+
+    if (idx.first == 0 && (displacement || avatar_it->is_left == true))
+        avatar_it->x_filled = MapMoveableElement::filled_max();
+
+    broadcast->moveItem(id, idx.first + avatar_it->xWithinTile(),
+                        idx.second + avatar_it->yWithinTile(), 0, secs / 2.);
 }
 
 void MatchServer::onDropBomb(const QString &id)
@@ -146,6 +249,7 @@ void MatchServer::startMatchImpl()
         e.y_filled = 7;
         e.id = players.front();
         map.element(0, 0).items.push_back(e);
+        map.index()[e.id] = QPair<int, int>(0, 0);
         broadcast->addItem(e.id, 0, 0, 0, "simplechar", "standing-down");
     }
     if (players.size() > 1) {
@@ -155,6 +259,7 @@ void MatchServer::startMatchImpl()
         e.y_filled = 7;
         e.id = players[1];
         map.element(map.width() - 1, 0).items.push_back(e);
+        map.index()[e.id] = QPair<int, int>(map.width() - 1, 0);
         broadcast->addItem(e.id, map.width() - 1, 0, 0, "simplechar",
                            "standing-down");
     }
@@ -165,6 +270,7 @@ void MatchServer::startMatchImpl()
         e.y_filled = 7;
         e.id = players[2];
         map.element(0, map.height() - 1).items.push_back(e);
+        map.index()[e.id] = QPair<int, int>(0, map.height() - 1);
         broadcast->addItem(e.id, 0, map.height() - 1, 0, "simplechar",
                            "standing-down");
     }
@@ -175,6 +281,7 @@ void MatchServer::startMatchImpl()
         e.y_filled = 7;
         e.id = players[3];
         map.element(map.width() - 1, map.height() - 1).items.push_back(e);
+        map.index()[e.id] = QPair<int, int>(map.width() - 1, map.height() - 1);
         broadcast->addItem(e.id, map.width() - 1, map.height() - 1, 0,
                            "simplechar", "standing-down");
     }

@@ -2,6 +2,7 @@
 #define MATCHSERVERMATCHSTATE_H
 
 #include <QtCore/QObject>
+#include <chrono>
 
 class MatchServerMatchState : public QObject
 {
@@ -21,6 +22,11 @@ signals:
     void moveDownSignal(double seconds);
     void moveLeftSignal(double seconds);
     void dropBombSignal();
+
+private:
+    bool isMovementValid(double seconds);
+
+    std::chrono::steady_clock::time_point lastMoveCommand;
 };
 
 #endif // MATCHSERVERMATCHSTATE_H

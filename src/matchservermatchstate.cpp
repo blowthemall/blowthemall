@@ -1,6 +1,10 @@
 #include "matchservermatchstate.h"
 
-MatchServerMatchState::MatchServerMatchState(QObject *parent) : QObject(parent)
+using namespace std;
+
+MatchServerMatchState::MatchServerMatchState(QObject *parent)
+    : QObject(parent)
+    , lastMoveCommand(chrono::steady_clock::now())
 {}
 
 void MatchServerMatchState::moveUp(double seconds)
@@ -15,6 +19,9 @@ void MatchServerMatchState::moveRight(double seconds)
 
 void MatchServerMatchState::moveDown(double seconds)
 {
+    if (!isMovementValid(seconds))
+        return;
+
     emit moveDownSignal(seconds);
 }
 
@@ -26,4 +33,10 @@ void MatchServerMatchState::moveLeft(double seconds)
 void MatchServerMatchState::dropBomb()
 {
     emit dropBombSignal();
+}
+
+inline bool MatchServerMatchState::isMovementValid(double seconds)
+{
+    auto now = chrono::steady_clock::now();
+    return now > lastMoveCommand + chrono::duration<decltype(seconds)>{seconds};
 }

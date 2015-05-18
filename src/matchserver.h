@@ -22,7 +22,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-#include <QtCore/QMap>
 #include "mapmodel.h"
 
 namespace Tufao {

@@ -7,6 +7,7 @@ constexpr int MAP_HEIGHT = 11;
 constexpr int SCENE_WIDTH = MAP_WIDTH * TILE_SIZE;
 constexpr int SCENE_HEIGHT = MAP_HEIGHT * TILE_SIZE;
 constexpr int KEY_EVENT_MAX_LATENCY = 200;
+constexpr int MS_PER_FILL_UNIT = 20;
 
 #endif // GLOBAL
 
