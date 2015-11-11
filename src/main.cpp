@@ -17,31 +17,20 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-#include <memory>
+/*#include <memory>
 
 #include <QtGui/QIcon>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlComponent>
-#include <QtWidgets/QApplication>
+#include <QtWidgets/QApplication>*/
 
 #include "blowthemallcontroller.h"
 
+#include "gameloop.h"
+
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-    BlowThemAllController controller;
-
-    app.setApplicationDisplayName("BlowThemAll");
-    app.setWindowIcon(QIcon(":/gfx/logo.png"));
-
-    QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("blowthemall", &controller);
-
-    QQmlComponent component(&engine, QUrl(QStringLiteral("qrc:///ui/main.qml")));
-    auto object = std::unique_ptr<QObject>(component.create());
-    controller.setComponentObject(object.get());
-    object->findChild<QObject*>("versionText")->setProperty("text", 'v' + QString{BLOWTHEMALL_VERSION});
-
-    return app.exec();
+  bta::GameLoop game;
+  game.run();
 }
