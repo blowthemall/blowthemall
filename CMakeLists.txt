@@ -1,21 +1,23 @@
 # Project BlowThemALL
 project(blowthemall)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
+
 # Metadata
 set(BLOWTHEMALL_VERSION_MAJOR 0)
 set(BLOWTHEMALL_VERSION_MINOR 0)
-set(BLOWTHEMALL_VERSION_PATCH 0)
+set(BLOWTHEMALL_VERSION_PATCH 1)
 set(BLOWTHEMALL_VERSION ${BLOWTHEMALL_VERSION_MAJOR}.${BLOWTHEMALL_VERSION_MINOR}.${BLOWTHEMALL_VERSION_PATCH})
 set(BLOWTHEMALL_BRIEF "A multiplayer oriented bomberman-like game")
 
 # Dependencies
 cmake_minimum_required(VERSION 3.1.0)
-find_package(Qt5QuickWidgets REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Network REQUIRED)
-find_package(Tufao1 REQUIRED)
+#find_package(Qt5QuickWidgets REQUIRED)
+#find_package(Qt5Widgets REQUIRED)
+#find_package(Qt5Network REQUIRED)
+#find_package(Tufao1 REQUIRED)
 
-include_directories(${TUFAO_INCLUDE_DIR})
+#include_directories(${TUFAO_INCLUDE_DIR})
 
 # Targets
 add_subdirectory(src)

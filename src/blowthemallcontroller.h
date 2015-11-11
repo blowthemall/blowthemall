@@ -20,21 +20,19 @@
 #ifndef BLOWTHEMALLCONTROLLER_H
 #define BLOWTHEMALLCONTROLLER_H
 
-#include <QtCore/QObject>
-
 class GameScene;
 class QGraphicsView;
 class MatchServer;
 class MatchClient;
 
-class BlowThemAllController : public QObject
+class BlowThemAllController
 {
-    Q_OBJECT
+    //Q_OBJECT
 public:
-    explicit BlowThemAllController(QObject *parent = 0);
+    explicit BlowThemAllController();
     ~BlowThemAllController();
 
-    void setComponentObject(QObject *component);
+    /*void setComponentObject(QObject *component);
 
 signals:
     void matchStarted();
@@ -49,7 +47,7 @@ private:
     GameScene *gameScene;
     QGraphicsView *gameView;
     MatchServer *matchServer;
-    MatchClient *matchClient;
+    MatchClient *matchClient;*/
 };
 
 #endif // BLOWTHEMALLCONTROLLER_H
