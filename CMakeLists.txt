@@ -11,7 +11,8 @@ set(BLOWTHEMALL_VERSION ${BLOWTHEMALL_VERSION_MAJOR}.${BLOWTHEMALL_VERSION_MINOR
 set(BLOWTHEMALL_BRIEF "A multiplayer oriented bomberman-like game")
 
 # Dependencies
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+find_package(SDL2 REQUIRED)
 
 # Targets
 add_subdirectory(src)

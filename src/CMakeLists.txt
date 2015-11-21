@@ -21,7 +21,11 @@ set_target_properties(
     VERSION ${BLOWTHEMALL_VERSION}
 )
 
-target_link_libraries(blowthemall SDL2)
+target_include_directories(blowthemall
+  PRIVATE ${SDL2_INCLUDE_DIR}
+)
+
+target_link_libraries(blowthemall ${SDL2_LIBRARY})
 
 # Install info
 install(TARGETS blowthemall
