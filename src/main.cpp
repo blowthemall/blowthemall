@@ -17,16 +17,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-/*#include <memory>
-
-#include <QtGui/QIcon>
-#include <QtQml/QQmlApplicationEngine>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlComponent>
-#include <QtWidgets/QApplication>*/
-
-#include "blowthemallcontroller.h"
-
 #include "gameloop.h"
 
 int main(int argc, char *argv[])

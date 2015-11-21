@@ -12,12 +12,6 @@ set(BLOWTHEMALL_BRIEF "A multiplayer oriented bomberman-like game")
 
 # Dependencies
 cmake_minimum_required(VERSION 3.1.0)
-#find_package(Qt5QuickWidgets REQUIRED)
-#find_package(Qt5Widgets REQUIRED)
-#find_package(Qt5Network REQUIRED)
-#find_package(Tufao1 REQUIRED)
-
-#include_directories(${TUFAO_INCLUDE_DIR})
 
 # Targets
 add_subdirectory(src)
