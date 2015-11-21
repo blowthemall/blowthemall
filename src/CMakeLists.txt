@@ -42,10 +42,7 @@ set_target_properties(
     VERSION ${BLOWTHEMALL_VERSION}
 )
 
-#qt5_use_modules(blowthemall Core QuickWidgets Widgets Network)
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
-
-target_link_libraries(blowthemall SDL2)#${TUFAO_LIBRARIES})
+target_link_libraries(blowthemall SDL2)
 
 # Install info
 install(TARGETS blowthemall
